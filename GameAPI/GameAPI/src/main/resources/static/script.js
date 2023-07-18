@@ -4,7 +4,7 @@ const playerForm = document.getElementById('player-form');
 
 // Fetch all players from the API
 function fetchPlayers() {
-  fetch('http://localhost:8080/players')
+  fetch('http://localhost:8080/api/v1/player')
     .then(response => response.json())
     .then(players => {
       playerContainer.innerHTML = ''; // Clear the existing player cards
@@ -51,14 +51,14 @@ playerForm.addEventListener('submit', event => {
   event.preventDefault();
 
   const name = document.getElementById('name').value;
-  const score = document.getElementById('score').value;
+  const id = document.getElementById('id').value;
 
   const newPlayer = {
     name: name,
-    score: parseInt(score),
+    id: parseInt(score),
   };
 
-  fetch('http://localhost:8080/players', {
+  fetch('http://localhost:8080/api/v1/player', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
