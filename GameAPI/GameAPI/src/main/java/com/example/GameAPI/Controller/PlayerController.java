@@ -29,18 +29,19 @@ public class PlayerController {
     @GetMapping(path = "/{id}")
     public Player getSpecificPlayer(@PathVariable String id){
         Player existingPlayer = listOfPlayers.stream().filter(
-                (currPlayer) -> {
-                    return currPlayer.id.equals(id);
-                }
-        ).findFirst().get();
+                (currPlayer) -> currPlayer.getId().equals(id)
+        ).findFirst().orElse(null);
         return existingPlayer;
     }
+
 
     // Endpoint for updating a specific player by ID
     @PutMapping(path = "/{id}")
     public Player updateSpecificPlayer(@PathVariable String id, @RequestBody Player incomingPlayer){
         Player existingPlayer = getSpecificPlayer(id);
-        existingPlayer.name = incomingPlayer.name;
+        if (existingPlayer != null) {
+            existingPlayer.setName(incomingPlayer.getName());
+        }
         return existingPlayer;
     }
 
