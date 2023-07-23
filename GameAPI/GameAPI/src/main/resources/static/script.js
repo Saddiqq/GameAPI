@@ -21,6 +21,9 @@ function createPlayerCard(player) {
   const playerCard = document.createElement('div');
   playerCard.classList.add('player-card');
 
+  const id = document.createElement('p');
+  id.textContent = `ID: ${player.id}`;
+
   const name = document.createElement('h3');
   name.textContent = player.name;
 
@@ -31,6 +34,7 @@ function createPlayerCard(player) {
   deleteButton.textContent = 'Delete';
   deleteButton.addEventListener('click', () => deletePlayer(player.id));
 
+  playerCard.appendChild(id);
   playerCard.appendChild(name);
   playerCard.appendChild(score);
   playerCard.appendChild(deleteButton);
@@ -40,10 +44,12 @@ function createPlayerCard(player) {
 
 // Delete a player
 function deletePlayer(playerId) {
-  fetch(`http://localhost:8080/players/${playerId}`, {
+  fetch(`http://localhost:8080/api/v1/player/${playerId}`, {
     method: 'DELETE',
   })
-    .then(() => fetchPlayers());
+    .then(() => {
+      fetchPlayers();
+    });
 }
 
 // Handle form submission to create a new player
@@ -52,11 +58,29 @@ playerForm.addEventListener('submit', event => {
 
   const name = document.getElementById('name').value;
   const id = document.getElementById('id').value;
+  const score = document.getElementById('score').value;
 
   const newPlayer = {
     name: name,
-    id: parseInt(score),
+    id: id, // Use 'id' instead of 'score' for the player ID
+    score: parseInt(score),
   };
+
+  fetch('http://localhost:8080/api/v1/player', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newPlayer),
+  })
+    .then(() => {
+      fetchPlayers();
+      playerForm.reset();
+    });
+});
+
+// Fetch players on page load
+fetchPlayers();
 
   fetch('http://localhost:8080/api/v1/player', {
     method: 'POST',
