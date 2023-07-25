@@ -1,4 +1,3 @@
-// script.js
 const playerContainer = document.getElementById('player-container');
 const playerForm = document.getElementById('player-form');
 
@@ -60,27 +59,13 @@ playerForm.addEventListener('submit', event => {
   const id = document.getElementById('id').value;
   const score = document.getElementById('score').value;
 
+  console.log(score); // Add this line to check the score value
+
   const newPlayer = {
     name: name,
-    id: id, // Use 'id' instead of 'score' for the player ID
+    id: id,
     score: parseInt(score),
   };
-
-  fetch('http://localhost:8080/api/v1/player', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newPlayer),
-  })
-    .then(() => {
-      fetchPlayers();
-      playerForm.reset();
-    });
-});
-
-// Fetch players on page load
-fetchPlayers();
 
   fetch('http://localhost:8080/api/v1/player', {
     method: 'POST',
